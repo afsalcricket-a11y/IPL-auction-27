@@ -40,7 +40,7 @@ const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&g
 const cr=n=>'₹'+(+n).toFixed(2)+' Cr',inc=b=>b<1?.05:b<2?.1:b<5?.2:.25;
 const me=()=>S.members.find(m=>m.uid==S.uid),myT=()=>me()?.team,isAdmin=()=>S.rooms?.admin==S.uid;
 const sq=t=>S.room_players.filter(x=>x.team==t&&x.status=='sold');
-async function rpc(f,a){const{error}=await sb.rpc(f,a);if(error)alert(error.message);return !error}
+async function rpc(f,a){const{error}=await sb.rpc(f,a);if(error){alert(error.message);return false}if(S.code){await Promise.all(['rooms','room_teams','room_players','members'].map(ld));render()}return true}
 const ad=(act,p)=>rpc('admin_do',{c:S.code,act,p}),bid=()=>rpc('place_bid',{c:S.code}),pick=t=>rpc('pick_team',{c:S.code,t}),rt=(i,ok)=>rpc('respond_trade',{i,ok});
 async function enter(c){S.code=c;localStorage.setItem('room',c);await Promise.all(Object.keys(KEY).map(ld));
  if(!S.rooms)return leave();sub();S.ready=true;render()}
@@ -189,7 +189,7 @@ const tone=(f,t0,d,type='sine',v=.14)=>{if(!S.snd)return;const a=getAC();if(!a)r
 const sfxBid=()=>tone(1100,0,.07,'square',.05),sfxSold=()=>{tone(140,0,.18,'triangle',.6);tone(140,.17,.22,'triangle',.6);[523.25,659.25,783.99,1046.5].forEach((f,i)=>tone(f,.4+i*.12,.45,'triangle',.16))},sfxUnsold=()=>{tone(180,0,.3,'sawtooth',.12);tone(130,.28,.4,'sawtooth',.12)},sfxTrade=()=>[587.33,783.99,987.77].forEach((f,i)=>tone(f,i*.12,.35,'sine',.15));
 const snd=()=>{S.snd=!S.snd;localStorage.setItem('snd',S.snd?'1':'0');if(S.snd)sfxBid();render()};
 
-const call=(f,a)=>sb.rpc(f,a).then(r=>{if(r.error){S.err=f+': '+r.error.message;render()}else if(S.err){S.err='';render()}return r},e=>{S.err=f+': '+e.message;render()});
+const call=(f,a)=>sb.rpc(f,a).then(async r=>{if(r.error){S.err=f+': '+r.error.message;render()}else{if(S.err)S.err='';if(S.code){await Promise.all(['rooms','room_teams','room_players'].map(ld));render()}}return r},e=>{S.err=f+': '+e.message;render()});
 function evt(t,o,n){if(!o||!n||S.ready!==true)return;const now=Date.now();
  if(t=='rooms'){if(o.cur&&o.cur==n.cur&&n.bidder&&(n.bidder!=o.bidder||+n.bid!=+o.bid)){S.ev.push({t:now,m:`🔨 ${n.bidder} bid ${cr(n.bid)}`});sfxBid()}
   if(!n.cur&&n.res_kind&&n.res_pid&&n.res_until!=o.res_until){const nm=esc(S.P[n.res_pid]?.name||'');S.ev.push({t:now,m:n.res_kind=='sold'?`🏆 SOLD: ${nm} to ${n.res_team} for ${cr(n.res_price)}`:`❌ UNSOLD: ${nm}`,k:n.res_kind});if(n.res_kind=='sold'){sfxSold();confetti()}else sfxUnsold()}}
@@ -205,7 +205,7 @@ const trAlert=()=>S.trBanner&&Date.now()<S.trBanner.until?`<div class=tban>${esc
 function room(){const r=S.rooms;return hdr()+strip()+trAlert()+(r.status=='lobby'?lobby():r.phase=='retention'?ret():main())+nav()+(S.tab=='chat'?chatT():S.tab=='sq'?squads():S.tab=='ppl'?people():S.tab=='tr'?trTab():setT())+modal()}
 
 function tick(){const r=S.rooms;if(!r)return;
- if(Date.now()-(S.bgSync||0)>2500&&!S.syncing){S.bgSync=Date.now();S.syncing=1;Promise.all(['rooms','members','room_teams','room_players','retention','ret_lock'].map(ld)).then(()=>{S.syncing=0;render()},()=>{S.syncing=0})}
+ if(Date.now()-(S.bgSync||0)>1500&&!S.syncing){S.bgSync=Date.now();S.syncing=1;Promise.all(['rooms','members','room_teams','room_players','retention','ret_lock'].map(ld)).then(()=>{S.syncing=0;render()},()=>{S.syncing=0})}
  if(S.trBanner&&Date.now()>=S.trBanner.until){S.trBanner=null;render()}
  if(r.cur&&!S.P[r.cur]&&!S.pl){S.pl=1;sb.from('players').select().then(({data})=>{(data||[]).forEach(p=>S.P[p.id]=p);S.pl=0;render()},()=>{S.pl=0})}
  if(!r.cur){const na=r.next_at||r.res_until,l=na?Date.parse(na)-(Date.now()+S.off):0,rb=$('#rb');if(rb)rb.style.width=Math.max(0,Math.min(100,l/35))+'%';
