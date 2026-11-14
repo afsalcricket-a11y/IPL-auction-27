@@ -21,7 +21,7 @@ button{background:var(--am);color:#111;font-weight:700;border:0;cursor:pointer}b
 .sh{color:#f59e0b;font-weight:800;margin:12px 0 4px;display:flex;gap:8px;align-items:center}
 .nav{display:flex;gap:6px;margin:8px 0}.nav button{flex:1;background:#141418;color:#fff;border:1px solid #24242c;font-size:18px;position:relative;padding:10px 4px}.nav button.on{border-color:#f59e0b;background:#1c1c22}
 .bdg{position:absolute;top:-6px;right:-4px;background:#ef4444;color:#fff;font-size:11px;border-radius:999px;padding:1px 6px}
-.ov{position:fixed;inset:0;background:#000b;z-index:50;display:flex;align-items:flex-end;justify-content:center}.mo{background:#141418;border:1px solid #24242c;border-radius:16px 16px 0 0;width:100%;max-width:640px;max-height:88vh;display:flex;flex-direction:column;padding:12px}.mb{overflow:auto;flex:1}
+.ov{position:fixed;inset:0;background:#000b;z-index:50;display:flex;align-items:flex-end;justify-content:center}.mo{background:#141418;border:1px solid #24242c;border-radius:16px 16px 0 0;width:100%;max-width:640px;max-height:88vh;display:flex;flex-direction:column;padding:12px;touch-action:pan-y}.mb{overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch;touch-action:pan-y}
 .tb{flex:1;background:#1c1c22;color:#fff;border:1px solid #24242c}.tb.on{background:#10b981;color:#04130d}
 .mode{flex:1;min-width:150px;border:2px solid #24242c;border-radius:12px;padding:10px;background:#141418;cursor:pointer}.mode.on{border-color:#f59e0b}
 .ev{padding:8px 10px;border-radius:8px;background:#1c1c22;margin:5px 0}.ev.sold{background:#064e3b;border:1px solid #10b981}.ev.trd{background:#3b2706;border:1px solid #f59e0b}
@@ -48,9 +48,13 @@ function leave(){localStorage.removeItem('room');location.reload()}
 function sub(){const ch=sb.channel('r'+S.code,{config:{presence:{key:S.uid}}});
  Object.keys(KEY).forEach(t=>ch.on('postgres_changes',{event:'*',schema:'public',table:t,filter:KEY[t]+'=eq.'+S.code},async()=>{await ld(t);render()}));
  ch.on('presence',{event:'sync'},()=>{S.on=Object.keys(ch.presenceState());render()}).subscribe(s=>s=='SUBSCRIBED'&&ch.track({t:1}))}
-function render(){const a=document.activeElement,id=a?.id,v=a?.value,p=a?.selectionStart;
+function render(){
+ const a=document.activeElement,id=a?.id,v=a?.value,p=a?.selectionStart;
+ const mbEl=$('.mb');const scrollTop=mbEl?mbEl.scrollTop:0;
  $('#app').innerHTML=S.code?room():home();
- if(id){const e=document.getElementById(id);if(e){e.value=v;e.focus();try{e.setSelectionRange(p,p)}catch{}}}}
+ if(id){const e=document.getElementById(id);if(e){e.value=v;e.focus();try{e.setSelectionRange(p,p)}catch{}}}
+ const newMb=$('.mb');if(newMb)newMb.scrollTop=scrollTop;
+}
 async function mk(){if(!S.nm)return alert('Enter your name');const{data,error}=await sb.rpc('create_room2',{nm:S.nm,md:S.md||'m1'});if(error)return alert(error.message);enter(data)}
 async function jn(){const c=(S.cc||'').trim().toUpperCase();if(!S.nm||!c)return alert('Enter name and code');if(await rpc('join_room',{c,nm:S.nm}))enter(c)}
 
