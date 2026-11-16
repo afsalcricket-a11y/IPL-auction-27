@@ -28,7 +28,7 @@
 
 | Franchise Lobby & Team Selection | Blind Pre-Auction Retention Phase | Live Auction Bidding Room |
 | :---: | :---: | :---: |
-| ![Franchise Lobby and Selection](./screenshots/13504.jpg) | ![Pre-Auction Retention Phase](./screenshots/13505.jpg) | ![Live Auction Bidding Room](./screenshots/13506.jpg) |
+| ![Franchise Lobby and Selection].  (IMG_20261116_104324.JPG) | ![Pre-Auction Retention Phase](IMG_20261116_104340.JPG) | ![Live Auction Bidding Room](IMG_20261116_104354.JPG) |
 | *Claim any of the 10 IPL franchises or join as a spectator* | *Tiered retention slabs (`₹18–4 Cr`) & automatic RTM calculation* | *Synchronized countdown, live purse/OS tracker & hammer feed* |
 
 ### Pool Analytics, Trading, Host Controls & Live Rosters
