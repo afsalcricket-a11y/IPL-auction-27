@@ -35,7 +35,7 @@
 
 | Set-Wise Player Pool & Stats | Multi-Player & Cash Trade System | Host Controls & Room Settings | Live Franchise Rosters |
 | :---: | :---: | :---: | :---: |
-| ![Auction Stats and Player Sets](./screenshots/13502.jpg) | ![Multi-Player and Cash Trade](./screenshots/13500.jpg) | ![Host Controls and Settings](./screenshots/13501.jpg) | ![Live Franchise Rosters](./screenshots/13499.jpg) |
+| ![Auction Stats and Player Sets](Screenshot_2026-11-16-10-42-18-53_40deb401b9ffe8e1df2f1cc5ba480b12.jpg) | ![Multi-Player and Cash Trade](Screenshot_2026-11-16-10-42-03-33_40deb401b9ffe8e1df2f1cc5ba480b12.jpg) | ![Host Controls and Settings](Screenshot_2026-11-16-10-42-09-56_40deb401b9ffe8e1df2f1cc5ba480b12.jpg) | ![Live Franchise Rosters](Screenshot_2026-11-16-10-40-12-45_40deb401b9ffe8e1df2f1cc5ba480b12.jpg) |
 | *250 players across 14 sets filterable by `Up`, `Sold`, `Unsold` & role* | *Swap multiple players & cash between teams with live announcements* | *Configure bid timers, Max Bid Cap per player & `Pause`/`Skip`/`End`* | *Track claimed franchises, host badge & live squad counts* |
 
 ---
